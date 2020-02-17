@@ -1,28 +1,19 @@
-# base image
-FROM node:10.3.0
+#Stage: 1 - Build project
+FROM node:10 as node
 
-# install chrome for protractor tests
-#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-#RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-#RUN apt-get update && apt-get install -yq google-chrome-stable
+WORKDIR /usr/src/app
 
-# set working directory
-WORKDIR /app
+COPY package*.json ./
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-
-# install and cache app dependencies
-RUN npm install -g npm@6.4.1
-COPY package.json /app/package.json
 RUN npm install
-RUN npm install -g @angular/cli@9.0.2
 
-# add app
-COPY . /app
+COPY . .
 
-#
-EXPOSE 8000
+RUN npm run build
 
-# start app
-CMD ["ng" "serve" "--host", "0.0.0.0"]
+#Stage: 2 - Serve project
+FROM nginx:1.15.8-alpine
+
+COPY --from=node /usr/src/app/dist/web /usr/share/nginx/html
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf

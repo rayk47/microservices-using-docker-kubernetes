@@ -1,5 +1,5 @@
 {
-  "name": "images",
+  "name": "videos",
   "version": "1.0.0",
   "description": "A microservice for all things videos",
   "main": "dist/index.js",

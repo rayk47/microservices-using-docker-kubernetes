@@ -15,7 +15,6 @@ app.use((request:any, response:any, next:any) => {
 
 // define a route handler for the default home page
 app.get( '/api/v1/images/', ( req:any, res:any ) => {
-    console.log("We made it");
     const jsonResponse:string = 'Returning All Images on http://' + os.hostname;
     res.status(200).json({data: jsonResponse});
 } );
