@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  web:
+    build:
+      context: web/
+    ports:
+      - "80:80"
+  images:
+    build:
+      context: images/
+    ports:
+      - "3000:3000"
+  videos:
+    build:
+      context: videos/
+    ports:
+      - "3001:3001"
